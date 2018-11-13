@@ -46,14 +46,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Calculux.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Calculux.Designer.cs">
+      <DependentUpon>Calculux.cs</DependentUpon>
     </Compile>
+    <Compile Include="InvalidNotationException.cs" />
+    <Compile Include="Maths\Addition.cs" />
+    <Compile Include="Maths\Cosine.cs" />
+    <Compile Include="Maths\Division.cs" />
+    <Compile Include="Maths\Exponentiation.cs" />
+    <Compile Include="Maths\Factorial.cs" />
+    <Compile Include="Maths\Function.cs" />
+    <Compile Include="Maths\Multiplication.cs" />
+    <Compile Include="Maths\NaturalLogarithm.cs" />
+    <Compile Include="Maths\NaturalNumber.cs" />
+    <Compile Include="Maths\Power.cs" />
+    <Compile Include="Maths\RealNumber.cs" />
+    <Compile Include="Maths\Sine.cs" />
+    <Compile Include="Maths\Substraction.cs" />
+    <Compile Include="Maths\Variable.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.cs" />
+    <EmbeddedResource Include="Calculux.resx">
+      <DependentUpon>Calculux.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
