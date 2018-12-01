@@ -19,6 +19,14 @@ namespace Calculux.Maths {
             return string.Format("({0} + {1})", LeftOperand.ToString(), RightOperand.ToString());
         }
 
+        public override double Evaluate(double x) {
+            return LeftOperand.Evaluate(x) + RightOperand.Evaluate(x);
+        }
+
+        public override Function Differentiate() {
+            return new Addition(LeftOperand.Differentiate(), RightOperand.Differentiate());
+        }
+
         public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex) {
             string graph = string.Format("{0}\tnode{1} [ label = \"+\" ]", Environment.NewLine, nodeIndex);
 

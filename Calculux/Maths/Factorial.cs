@@ -7,14 +7,28 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class Factorial : Function {
 
-        public Function Operand { get; private set; }
+        public NaturalNumber Operand { get; private set; }
 
-        public Factorial(Function operand) {
+        public Factorial(NaturalNumber operand) {
             Operand = operand;
+        }
+
+        private int CalculateFactorial(int i) {
+            if (i <= 1)
+                return 1;
+            return i * CalculateFactorial(i - 1);
         }
 
         public override string ToString() {
             return string.Format("({0})!", Operand);
+        }
+
+        public override double Evaluate(double x) {
+            return CalculateFactorial(Convert.ToInt32(Operand.Evaluate(x)));
+        }
+
+        public override Function Differentiate() {
+            throw new NotSupportedOperationException("Symbolic differentiation of factorial is not supported!");
         }
 
         public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {

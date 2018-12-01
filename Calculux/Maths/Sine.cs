@@ -17,6 +17,14 @@ namespace Calculux.Maths {
             return string.Format("sin({0})", Operand.ToString());
         }
 
+        public override double Evaluate(double x) {
+            return Math.Sin(Operand.Evaluate(x));
+        }
+
+        public override Function Differentiate() {
+            return new Multiplication(new Cosine(Operand), Operand.Differentiate());
+        }
+
         public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
             string graph = string.Format("{0}\tnode{1} [ label = \"sin\" ]", Environment.NewLine, nodeIndex);
 

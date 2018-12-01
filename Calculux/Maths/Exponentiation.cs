@@ -23,6 +23,14 @@ namespace Calculux.Maths {
             return string.Format("exp({0})", Exponent.ToString());
         }
 
+        public override double Evaluate(double x) {
+            return Math.Exp(Exponent.Evaluate(x));
+        }
+
+        public override Function Differentiate() {
+            return new Multiplication(new Exponentiation(Exponent), Exponent.Differentiate());
+        }
+
         public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
             string graph = string.Format("{0}\tnode{1} [ label = \"exp\" ]", Environment.NewLine, nodeIndex);
 

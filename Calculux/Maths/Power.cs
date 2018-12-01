@@ -8,15 +8,23 @@ namespace Calculux.Maths {
     class Power : Function {
 
         public Function Base { get; private set; }
-        public Function Exponent { get; private set; }
+        public NaturalNumber Exponent { get; private set; }
 
-        public Power(Function baseFunction, Function exponent) {
+        public Power(Function baseFunction, NaturalNumber exponent) {
             Base = baseFunction;
             Exponent = exponent;
         }
 
         public override string ToString() {
-            return string.Format("({0} ^ {1})", Base.ToString(), Exponent.ToString());
+            return string.Format("{0} ^ {1}", Base.ToString(), Exponent.ToString());
+        }
+
+        public override double Evaluate(double x) {
+            return Math.Pow(Base.Evaluate(x), Exponent.Evaluate(x));
+        }
+
+        public override Function Differentiate() {
+            return new Multiplication(new Multiplication(Exponent, new Power(Base, new NaturalNumber(Exponent.Value - 1))), Base.Differentiate());
         }
 
         public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {

@@ -28,10 +28,10 @@ namespace Calculux {
                     case char character when (char.IsDigit(character)):
                         value = value.Insert(0, character.ToString());
 
-                        char nextToken = input[i - 1];
+                        char nextToken = (i > 0) ? input[i - 1] : '\0';
                         if (nextToken == '-') {
-                            i--;
                             value = value.Insert(0, nextToken.ToString());
+                            i--;
                         }
                         else if (!char.IsDigit(nextToken) && nextToken != '.' && int.TryParse(value, out int n) && n >= 0 && n <= 9) {
                             stack.Push(new NaturalNumber(Convert.ToInt32(value)));
@@ -53,7 +53,11 @@ namespace Calculux {
                         stack.Push(new Addition(stack.Pop(), stack.Pop()));
                         break;
                     case '-':
-                        stack.Push(new Substraction(stack.Pop(), stack.Pop()));
+                        char prevToken = input[i + 1];
+                        if (prevToken == '(')
+                            stack.Push(new Substraction(stack.Pop(), stack.Pop()));
+                        else
+                            stack.Push(new Negation(stack.Pop()));
                         break;
                     case '*':
                         stack.Push(new Multiplication(stack.Pop(), stack.Pop()));
@@ -62,7 +66,7 @@ namespace Calculux {
                         stack.Push(new Division(stack.Pop(), stack.Pop()));
                         break;
                     case '^':
-                        stack.Push(new Power(stack.Pop(), stack.Pop()));
+                        stack.Push(new Power(stack.Pop(), (NaturalNumber)stack.Pop()));
                         break;
                     case 's':
                         stack.Push(new Sine(stack.Pop()));

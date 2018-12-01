@@ -62,11 +62,13 @@
     <Compile Include="Maths\Multiplication.cs" />
     <Compile Include="Maths\NaturalLogarithm.cs" />
     <Compile Include="Maths\NaturalNumber.cs" />
+    <Compile Include="Maths\Negation.cs" />
     <Compile Include="Maths\Power.cs" />
     <Compile Include="Maths\RealNumber.cs" />
     <Compile Include="Maths\Sine.cs" />
     <Compile Include="Maths\Substraction.cs" />
     <Compile Include="Maths\Variable.cs" />
+    <Compile Include="NotSupportedOperationException.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
