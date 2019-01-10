@@ -7,34 +7,38 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class Cosine : Function {
 
-        public Function Operand { get; private set; }
+        public Function Operand { get; }
 
         public Cosine(Function operand) {
             Operand = operand;
         }
 
         public override string ToString() {
-            return string.Format("cos({0})", Operand.ToString());
+            return $"cos({Operand})";
         }
 
         public override double Evaluate(double x) {
             return Math.Cos(x);
         }
 
+        public override Function Simplify() {
+            return new Cosine(Operand.Simplify());
+        }
+
         public override Function Differentiate() {
             return new Multiplication(new Negation(new Sine(Operand)), Operand.Differentiate());
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"cos\" ]", Environment.NewLine, nodeIndex);
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"cos\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             prevIndex = nodeIndex;
             nodeIndex++;
-            graph += Operand.CreateGraphRecursively(ref nodeIndex, prevIndex);
+            graph += Operand.CreateTreeRecursively(ref nodeIndex, prevIndex);
 
             return graph;
         }

@@ -7,29 +7,33 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class NaturalNumber : Function {
 
-        public int Value { get; private set; }
+        private readonly int value;
 
         public NaturalNumber(int value) {
-            Value = value;
+            this.value = value;
         }
 
         public override string ToString() {
-            return Value.ToString();
+            return value.ToString();
         }
 
         public override double Evaluate(double x) {
-            return Value;
+            return value;
+        }
+
+        public override Function Simplify() {
+            return new NaturalNumber(value);
         }
 
         public override Function Differentiate() {
             return new NaturalNumber(0);
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"{2}\" ]", Environment.NewLine, nodeIndex, Value);
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"{ToString()}\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             nodeIndex++;

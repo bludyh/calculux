@@ -7,29 +7,39 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class RealNumber : Function {
 
-        public double Value { get; private set; }
+        private readonly double value;
 
         public RealNumber(double value) {
-            Value = value;
+            this.value = value;
         }
 
         public override string ToString() {
-            return (Value == Math.PI) ? "\u03C0" : Value.ToString();
+            switch (value) {
+                case Math.E:
+                    return "e";
+                case Math.PI:
+                    return "\u03C0";
+            }
+            return value.ToString();
         }
 
         public override double Evaluate(double x) {
-            return Value;
+            return value;
+        }
+
+        public override Function Simplify() {
+            return new RealNumber(value);
         }
 
         public override Function Differentiate() {
             return new NaturalNumber(0);
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"{2}\" ]", Environment.NewLine, nodeIndex, (Value == Math.PI) ? "\u03C0" : Value.ToString());
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"{ToString()}\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             nodeIndex++;

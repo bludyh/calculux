@@ -7,40 +7,40 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class Exponentiation : Function {
 
-        public RealNumber Base {
-            get {
-                return new RealNumber(Math.E);
-            }
-        }
+        public RealNumber Base => new RealNumber(Math.E);
 
-        public Function Exponent { get; private set; }
+        public Function Exponent { get; }
 
         public Exponentiation(Function exponent) {
             Exponent = exponent;
         }
 
         public override string ToString() {
-            return string.Format("exp({0})", Exponent.ToString());
+            return $"exp({Exponent})";
         }
 
         public override double Evaluate(double x) {
             return Math.Exp(Exponent.Evaluate(x));
         }
 
+        public override Function Simplify() {
+            return new Exponentiation(Exponent.Simplify());
+        }
+
         public override Function Differentiate() {
             return new Multiplication(new Exponentiation(Exponent), Exponent.Differentiate());
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"exp\" ]", Environment.NewLine, nodeIndex);
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"exp\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             prevIndex = nodeIndex;
             nodeIndex++;
-            graph += Exponent.CreateGraphRecursively(ref nodeIndex, prevIndex);
+            graph += Exponent.CreateTreeRecursively(ref nodeIndex, prevIndex);
 
             return graph;
         }

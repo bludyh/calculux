@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class Factorial : Function {
 
-        public NaturalNumber Operand { get; private set; }
+        public NaturalNumber Operand { get; }
 
         public Factorial(NaturalNumber operand) {
             Operand = operand;
@@ -20,27 +20,31 @@ namespace Calculux.Maths {
         }
 
         public override string ToString() {
-            return string.Format("({0})!", Operand);
+            return $"{Operand}!";
         }
 
         public override double Evaluate(double x) {
-            return CalculateFactorial(Convert.ToInt32(Operand.Evaluate(x)));
+            return CalculateFactorial((int)Operand.Evaluate(0));
+        }
+
+        public override Function Simplify() {
+            return new Factorial((NaturalNumber)Operand.Simplify());
         }
 
         public override Function Differentiate() {
-            throw new NotSupportedOperationException("Symbolic differentiation of factorial is not supported!");
+            return new NaturalNumber(0);
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"!\" ]", Environment.NewLine, nodeIndex);
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"!\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             prevIndex = nodeIndex;
             nodeIndex++;
-            graph += Operand.CreateGraphRecursively(ref nodeIndex, prevIndex);
+            graph += Operand.CreateTreeRecursively(ref nodeIndex, prevIndex);
 
             return graph;
         }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class Power : Function {
 
-        public Function Base { get; private set; }
-        public NaturalNumber Exponent { get; private set; }
+        public Function Base { get; }
+        public NaturalNumber Exponent { get; }
 
         public Power(Function baseFunction, NaturalNumber exponent) {
             Base = baseFunction;
@@ -16,28 +16,36 @@ namespace Calculux.Maths {
         }
 
         public override string ToString() {
-            return string.Format("{0} ^ {1}", Base.ToString(), Exponent.ToString());
+            return $"{Base} ^ {Exponent}";
         }
 
         public override double Evaluate(double x) {
-            return Math.Pow(Base.Evaluate(x), Exponent.Evaluate(x));
+            return Math.Pow(Base.Evaluate(x), Exponent.Evaluate(0));
+        }
+
+        public override Function Simplify() {
+            if (Exponent.Evaluate(0) == 0)
+                return new NaturalNumber(1);
+            if (Exponent.Evaluate(0) == 1)
+                return Base.Simplify();
+            return new Power(Base.Simplify(), (NaturalNumber)Exponent.Simplify());
         }
 
         public override Function Differentiate() {
-            return new Multiplication(new Multiplication(Exponent, new Power(Base, new NaturalNumber(Exponent.Value - 1))), Base.Differentiate());
+            return new Multiplication(new Multiplication(Exponent, new Power(Base, new NaturalNumber((int)Exponent.Evaluate(0) - 1))), Base.Differentiate());
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"^\" ]", Environment.NewLine, nodeIndex);
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"^\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             prevIndex = nodeIndex;
             nodeIndex++;
-            graph += Base.CreateGraphRecursively(ref nodeIndex, prevIndex);
-            graph += Exponent.CreateGraphRecursively(ref nodeIndex, prevIndex);
+            graph += Base.CreateTreeRecursively(ref nodeIndex, prevIndex);
+            graph += Exponent.CreateTreeRecursively(ref nodeIndex, prevIndex);
 
             return graph;
         }

@@ -7,34 +7,40 @@ using System.Threading.Tasks;
 namespace Calculux.Maths {
     class Negation : Function {
 
-        public Function Operand { get; private set; }
+        public Function Operand { get; }
 
         public Negation(Function operand) {
             Operand = operand;
         }
 
         public override string ToString() {
-            return string.Format("-{0}", Operand);
+            return $"-{Operand}";
         }
 
         public override double Evaluate(double x) {
             return -Operand.Evaluate(x);
         }
 
+        public override Function Simplify() {
+            if (Operand.Simplify() is NaturalNumber n && n.Evaluate(0) == 0)
+                return new NaturalNumber(0);
+            return new Negation(Operand.Simplify());
+        }
+
         public override Function Differentiate() {
             return new Negation(Operand.Differentiate());
         }
 
-        public override string CreateGraphRecursively(ref int nodeIndex, int prevIndex = 0) {
-            string graph = string.Format("{0}\tnode{1} [ label = \"-\" ]", Environment.NewLine, nodeIndex);
+        public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {
+            var graph = $"{Environment.NewLine}\tnode{nodeIndex} [ label = \"-\" ]";
 
             if (prevIndex != 0) {
-                graph += string.Format("{0}\tnode{1} -- node{2}", Environment.NewLine, prevIndex, nodeIndex);
+                graph += $"{Environment.NewLine}\tnode{prevIndex} -- node{nodeIndex}";
             }
 
             prevIndex = nodeIndex;
             nodeIndex++;
-            graph += Operand.CreateGraphRecursively(ref nodeIndex, prevIndex);
+            graph += Operand.CreateTreeRecursively(ref nodeIndex, prevIndex);
 
             return graph;
         }
