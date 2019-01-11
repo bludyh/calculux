@@ -18,7 +18,7 @@ namespace Calculux.Maths {
         }
 
         public override double Evaluate(double x) {
-            return Math.Cos(x);
+            return Math.Cos(Operand.Evaluate(x));
         }
 
         public override Function Simplify() {

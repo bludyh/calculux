@@ -55,7 +55,7 @@ namespace Calculux {
                     case '-':
                         var prevToken = input[i + 1];
                         if (prevToken == '(')
-                            stack.Push(new Substraction(stack.Pop(), stack.Pop()));
+                            stack.Push(new Subtraction(stack.Pop(), stack.Pop()));
                         else
                             stack.Push(new Negation(stack.Pop()));
                         break;

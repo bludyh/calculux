@@ -33,7 +33,7 @@ namespace Calculux.Maths {
 
         public override Function Differentiate() {
             return new Division(
-                new Substraction(new Multiplication(LeftOperand.Differentiate(), RightOperand),
+                new Subtraction(new Multiplication(LeftOperand.Differentiate(), RightOperand),
                     new Multiplication(LeftOperand, RightOperand.Differentiate())),
                 new Power(RightOperand, new NaturalNumber(2)));
         }

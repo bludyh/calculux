@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Calculux.Maths {
-    class Substraction : Function {
+    class Subtraction : Function {
 
         public Function LeftOperand { get; }
         public Function RightOperand { get; }
 
-        public Substraction(Function leftOperand, Function rightOperand) {
+        public Subtraction(Function leftOperand, Function rightOperand) {
             LeftOperand = leftOperand;
             RightOperand = rightOperand;
         }
@@ -28,11 +28,11 @@ namespace Calculux.Maths {
                 return LeftOperand.Simplify();
             if (LeftOperand.Simplify() is NaturalNumber n1 && n1.Evaluate(0) == 0)
                 return new Negation(RightOperand.Simplify());
-            return new Substraction(LeftOperand.Simplify(), RightOperand.Simplify());
+            return new Subtraction(LeftOperand.Simplify(), RightOperand.Simplify());
         }
 
         public override Function Differentiate() {
-            return new Substraction(LeftOperand.Differentiate(), RightOperand.Differentiate());
+            return new Subtraction(LeftOperand.Differentiate(), RightOperand.Differentiate());
         }
 
         public override string CreateTreeRecursively(ref int nodeIndex, int prevIndex) {

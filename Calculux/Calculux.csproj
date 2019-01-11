@@ -83,7 +83,7 @@
     <Compile Include="Maths\Power.cs" />
     <Compile Include="Maths\RealNumber.cs" />
     <Compile Include="Maths\Sine.cs" />
-    <Compile Include="Maths\Substraction.cs" />
+    <Compile Include="Maths\Subtraction.cs" />
     <Compile Include="Maths\Variable.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
